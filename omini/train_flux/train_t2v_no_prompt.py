@@ -159,7 +159,7 @@ class ThermalToVisibleDataset(Dataset):
             "condition_0": self.to_tensor(thermal_img),
             "condition_type_0": "thermal",
             "position_delta_0": np.array([0, 0]),
-            "description": prompt,
+            "description": "",
             "drop_text": drop_text,
             "drop_image": drop_image
         }
@@ -232,6 +232,9 @@ def test_function(model, dataset, save_path, file_name, num_samples=3):
             drop_text = sample.get("drop_text", False)
 
             # 如果 prompt 为空，使用默认值
+            if not prompt or prompt.strip() == "":
+                if drop_text:
+                    prompt = ""
 
             # 转换 tensor 到 PIL Image
             thermal_img_pil = to_pil(thermal_tensor)
