@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 
 # ============= 根路径配置 =============
 RUN_DIR = "/home/cunjian/kai/cache/runs/20251103-133606/ckpt/16000"
-PYTHON_PACKAGES = "/mnt/sda/python_packages"
+
 ADAPTER_NAME = "ir_16000"
 
 
@@ -16,6 +16,7 @@ ADAPTER_NAME = "ir_16000"
 load_dotenv("../.env")
 ROOT = os.getenv("ROOT")
 print("ROOT:", ROOT)
+PYTHON_PACKAGES = os.getenv("PYTHON_PACKAGES")
 PROJECT_ROOT = f"{ROOT}/OminiControl"
 CONFIG_PATH = f"{PROJECT_ROOT}/spatial_alignment_thermal.yaml"
 FLUX_PATH = f"{ROOT}/requirements/FLUX.1-dev"

@@ -23,11 +23,11 @@ from dotenv import load_dotenv
 # ============================================================
 RUN_DIR = "/home/cunjian/kai/cache/runs/20251103-133606/ckpt/16000"
 ADAPTER_NAME = "ir_16000"
-PYTHON_PACKAGES = "/mnt/sda/python_packages"
 
 # ==================== 加载配置和初始化 ====================
 load_dotenv("../.env")
 ROOT = os.getenv("ROOT")
+PYTHON_PACKAGES = os.getenv("PYTHON_PACKAGES")
 print("ROOT:", ROOT)
 RESULTS_DIR = f"{ROOT}/output/test_thermal/results_mogle_gate"
 PROJECT_ROOT = f"{ROOT}/OminiControl"
