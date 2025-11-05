@@ -17,17 +17,19 @@ import pyiqa
 from torchvision import transforms
 import tempfile
 import shutil
-
+from dotenv import load_dotenv
 # ============================================================
 # =============== 路径与环境配置 ==============================
 # ============================================================
-
-ROOT = "/home/cunjian/kai/cache/T2V"
 RUN_DIR = "/home/cunjian/kai/cache/runs/20251103-133606/ckpt/16000"
-RESULTS_DIR = f"{ROOT}/output/test_thermal/results_mogle_gate_1.0"
-PYTHON_PACKAGES = "/mnt/sda/python_packages"
 ADAPTER_NAME = "ir_16000"
+PYTHON_PACKAGES = "/mnt/sda/python_packages"
 
+# ==================== 加载配置和初始化 ====================
+load_dotenv("../.env")
+ROOT = os.getenv("ROOT")
+print("ROOT:", ROOT)
+RESULTS_DIR = f"{ROOT}/output/test_thermal/results_mogle_gate"
 PROJECT_ROOT = f"{ROOT}/OminiControl"
 CONFIG_PATH = f"{PROJECT_ROOT}/spatial_alignment_thermal.yaml"
 FLUX_PATH = f"{ROOT}/requirements/FLUX.1-dev"

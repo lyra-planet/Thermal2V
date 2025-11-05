@@ -4,14 +4,18 @@
 # ==================== 配置区 ====================
 import os
 import sys
+from dotenv import load_dotenv
 
 # ============= 根路径配置 =============
-ROOT = "/home/cunjian/kai/cache/T2V"
 RUN_DIR = "/home/cunjian/kai/cache/runs/20251103-133606/ckpt/16000"
 PYTHON_PACKAGES = "/mnt/sda/python_packages"
+ADAPTER_NAME = "ir_16000"
 
 
 # ============= 模型和项目路径 =============
+load_dotenv("../.env")
+ROOT = os.getenv("ROOT")
+print("ROOT:", ROOT)
 PROJECT_ROOT = f"{ROOT}/OminiControl"
 CONFIG_PATH = f"{PROJECT_ROOT}/spatial_alignment_thermal.yaml"
 FLUX_PATH = f"{ROOT}/requirements/FLUX.1-dev"
@@ -19,7 +23,6 @@ FLUX_PATH = f"{ROOT}/requirements/FLUX.1-dev"
 # ============= 权重路径 =============
 LORA_WEIGHT_PATH = f"{RUN_DIR}/default.safetensors"
 MOGLE_WEIGHT_PATH = f"{RUN_DIR}/mogle.pt"
-ADAPTER_NAME = "ir_16000"
 
 # ============= 推理参数配置 =============
 IMAGE_SIZE = 256
