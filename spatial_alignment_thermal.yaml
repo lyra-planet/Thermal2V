@@ -1,0 +1,81 @@
+flux_path: "/home/cunjian/kai/cache/T2V/requirements/FLUX.1-dev"
+dtype: "bfloat16"
+
+# ==================== MoGLE 配置 ====================
+use_mogle: true
+mogle_config:
+  input_dim: 64              # Flux packed latent 特征维度 [bs, 256, 64]
+  hidden_dim: 256            # 隐层维度，可根据需要调整
+  output_dim: 64             # 输出维度，保持与输入一致
+  has_expert: true           # 启用专家混合机制
+  has_gating: true           # 启用门控机制
+  weight_is_scale: false     # weight 不作为 scale
+
+# 可选：恢复已训练的 MoGLE 权重
+# mogle_checkpoint_path: "/path/to/mogle.pt"
+
+# ==================== 模型配置 ====================
+model:
+  independent_condition: false
+
+# ==================== 训练配置 ====================
+train:
+  max_epochs: -1
+  max_steps: -1              # -1 表示按 epoch 训练
+  batch_size: 4              # 根据显存调整
+  devices: 1                 # GPU 数量
+  accumulate_grad_batches: 1
+  dataloader_workers: 2
+  gradient_checkpointing: true
+  precision: "bf16-true"
+  gradient_clip_val: 0.5
+  
+  # ========== 保存和采样配置 ==========
+  save_interval: 1000        # 每 1000 步保存一次
+  sample_interval: 100        # 每 20 步生成一次样本
+  print_every_n_steps: 10
+  save_path: "/home/cunjian/kai/cache/T2V/output/runs"
+  default_root_dir: "/home/cunjian/kai/cache/T2V/tmp/train"
+
+  # ========== LoRA 配置 ==========
+  lora_config:
+    r: 4
+    lora_alpha: 4
+    init_lora_weights: "gaussian"
+    target_modules: "(.*x_embedder|.*(?<!single_)transformer_blocks\\.[0-9]+\\.norm1\\.linear|.*(?<!single_)transformer_blocks\\.[0-9]+\\.attn\\.to_k|.*(?<!single_)transformer_blocks\\.[0-9]+\\.attn\\.to_q|.*(?<!single_)transformer_blocks\\.[0-9]+\\.attn\\.to_v|.*(?<!single_)transformer_blocks\\.[0-9]+\\.attn\\.to_out\\.0|.*(?<!single_)transformer_blocks\\.[0-9]+\\.ff\\.net\\.2|.*single_transformer_blocks\\.[0-9]+\\.norm\\.linear|.*single_transformer_blocks\\.[0-9]+\\.proj_mlp|.*single_transformer_blocks\\.[0-9]+\\.proj_out|.*single_transformer_blocks\\.[0-9]+\\.attn.to_k|.*single_transformer_blocks\\.[0-9]+\\.attn.to_q|.*single_transformer_blocks\\.[0-9]+\\.attn.to_v|.*single_transformer_blocks\\.[0-9]+\\.attn.to_out)"
+    lora_dropout: 0.05
+    bias: "none"
+
+  # ========== 优化器配置 ==========
+  optimizer:
+    type: "Prodigy"
+    params:
+      lr: 1
+      use_bias_correction: true
+      safeguard_warmup: true
+      weight_decay: 0.01
+
+  # ========== 数据集配置 ==========
+  dataset:
+    type: "local"
+    root: "/home/cunjian/kai/cache/T2V/t2v_dataset"
+    condition_size: 
+      - 256
+      - 256
+    target_size: 
+      - 256
+      - 256
+    drop_text_prob: 0.1
+    drop_image_prob: 0.0
+    position_delta: [0, 0]   # 条件位置偏移
+    position_scale: 1.0      # 条件尺度
+    train_descriptions: "train_descriptions.json"
+    test_descriptions: "test_descriptions.json"
+
+  # ========== W&B 配置 ==========
+  wandb:
+    project: "OminiControl"
+    entity: null             # 可选：团队名称
+
+# ==================== 条件类型 ====================
+condition_type: "thermal"    # 自定义条件类型标识
