@@ -12,11 +12,13 @@ from PIL import Image, ImageDraw, ImageFont
 from datasets import load_dataset
 from omini.train_flux.trainer_t2v import OminiModel, get_config, train
 from omini.pipeline.flux_omini import Condition, convert_to_condition, generate
-
+from dotenv import load_dotenv
+import os
 import json
-
+load_dotenv("../../.env")
 # ==================== 加载配置和初始化 ====================
-ROOT = "/home/cunjian/kai/cache/T2V"
+ROOT = os.getenv("ROOT")
+print("ROOT:", ROOT)
 PROJECT_ROOT = f"{ROOT}/OminiControl"
 CONFIG_PATH = f"{PROJECT_ROOT}/spatial_alignment_thermal.yaml"
 config = get_config(CONFIG_PATH)
